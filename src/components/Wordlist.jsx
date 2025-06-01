@@ -1,74 +1,71 @@
 import styles from "./wordlist.module.css"
-
-/*const table = [ {
-  firstItem: "English",
-  secondItem: "Transcription",
-  thirdItem: "Russian",
-  fourthItem: "Tags",
-  fifthItem: "Edit",
-  sixthItem: "Delete",
-} ,
-{
-  firstItem: "World",
-  secondItem: "",
-  thirdItem: "Мир",
-  fourthItem: "",
-  fifthItem: "",
-  sixthItem: "",
-},
-{
-  firstItem: "Mother",
-  secondItem: "",
-  thirdItem: "Мама",
-  fourthItem: "",
-  fifthItem: "",
-  sixthItem: "",
-},
-];
-
-const Table = () => {
-  return (
-    <>
-      {table.map((el) => (
-        <>
-        firstItem={el.firstItem}
-        secondItem={el.secondItem}
-        thirdItem={el.thirdItem}
-        fourthItem={el.fourthItem}
-        fifthItem={el.fifthItem}
-        sixthItem={el.sixthItem}
-        </>
-      ))}
-    </>
-  )
-}
-
-export default Table; */
+import editIcon from "../assets/images/icons/edit.svg"
+import removeIcon from "../assets/images/icons/remove.svg"
 
 const table = [
   {
     firstItem: "World",
-    secondItem: "",
+    secondItem: "[wɜːld]",
     thirdItem: "Мир",
-    fourthItem: "",
-    fifthItem: "",
-    sixthItem: "",
+    fourthItem: "World",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />,
   },
   {
     firstItem: "Mother",
-    secondItem: "",
+    secondItem: "[ˈmʌðə]",
     thirdItem: "Мама",
-    fourthItem: "",
-    fifthItem: "",
-    sixthItem: "",
+    fourthItem: "Family",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />, 
   },
   {
     firstItem: "Sun",
-    secondItem: "",
+    secondItem: "[sʌn]",
     thirdItem: "Солнце",
-    fourthItem: "",
-    fifthItem: "",
-    sixthItem: "",
+    fourthItem: "Nature",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />, 
+  },
+  {
+    firstItem: "Brother",
+    secondItem: "[ˈbɹʌðə(ɹ)]",
+    thirdItem: "Брат",
+    fourthItem: "Family",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />, 
+  },
+  {
+    firstItem: "Wind",
+    secondItem: "[wɪnd]",
+    thirdItem: "Ветер",
+    fourthItem: "Nature",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />, 
+  },
+  {
+    firstItem: "Blue",
+    secondItem: "[bluː]",
+    thirdItem: "Голубой",
+    fourthItem: "Colors",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />, 
+  },
+  {
+    firstItem: "Wolf",
+    secondItem: "[wʊlf]",
+    thirdItem: "Волк",
+    fourthItem: "Animals",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />, 
+  },
+  {
+    firstItem: "Yellow",
+    secondItem: "[ˈjeləʊ]",
+    thirdItem: "Жёлтый",
+    fourthItem: "Colors",
+    fifthItem: <img className={styles.edit} src={editIcon} alt="Edit" />,
+    sixthItem: <img className={styles.remove} src={removeIcon} alt="Remove" />, 
   },
 ];
 

@@ -1,3 +1,8 @@
+body {
+  background-color: rgb(211, 188, 160);
+  margin-top: 30px;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -16,9 +21,20 @@
 }
 
 .table th {
-  background-color: rgb(207, 184, 155);
+  background-color: rgb(172, 153, 130);
 }
 
 .table td {
   background-color: bisque;
+}
+
+.edit, .remove {
+  width: 15px;
+  height: 15px;
+  margin-left: 10%;
+  cursor: pointer;
+}
+
+.edit:hover, .remove:hover {
+  transform: scale(1.1);
 }
