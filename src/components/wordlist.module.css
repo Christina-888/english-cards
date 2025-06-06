@@ -14,6 +14,7 @@ body {
   border: 1px solid black;
   margin: 0 auto;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 20px;
 }
 
 .table th, .table td {
@@ -37,4 +38,9 @@ body {
 
 .edit:hover, .remove:hover {
   transform: scale(1.1);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
 }

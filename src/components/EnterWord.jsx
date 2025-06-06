@@ -1,29 +1,18 @@
-const enterTable = [
-  {
-    firstItem: "English",
-    secondItem: "Transcription",
-    thirdItem: "Russian",
-    fourthItem: "Tags",
-    fifthItem: "Add",
-    sixthItem: "Clear"
-  }
-]
+import styles from "./enterWord.module.css"
 
-const EnterTable = () => {
+const Form = () => {
   return (
-    <table className={styles.table}>
-      <tbody>
-        <tr>
-          <th>English</th>
-          <th>Transcription</th>
-          <th>Russian</th>
-          <th>Tags</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-      </tbody>
-    </table>
+    <form className={styles.table}>
+      <div className={styles.formRow}>
+        <input type="text" id="english" placeholder="English" required />
+        <input type="text" id="transcription" placeholder="Transcription" required />
+        <input type="text" id="russian" placeholder="Russian" required />
+        <input type="text" id="tags" placeholder="Tags" />
+        <button className={styles.btn} type="submit" id="add">Add</button>
+        <button className={styles.btn} type="reset" id="clear">Clear</button>
+      </div>    
+    </form> 
   );
 };
 
-export default EnterTable;
+export default Form;
