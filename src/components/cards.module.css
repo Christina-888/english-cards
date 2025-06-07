@@ -1,0 +1,45 @@
+.cardsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  border: 3px solid rgb(253, 205, 147);
+  background-color: bisque;
+  border-radius: 20px;
+  margin: 1%;
+  padding: 5%;
+  width: 40%;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.carouselBtns {
+  align-self: center;
+  cursor: pointer;
+}
+
+.carouselBtn {
+  background-color: rgb(172, 153, 130); 
+  border-radius: 25px;
+  padding: 6px 13px;
+  font-weight: bolder;
+  font-size: 1.5rem;
+}
+
+.cardBtn {
+  background-color: rgb(172, 153, 130);
+  margin-top: 15%;
+  padding: 1% 4%;
+  border-radius: 20px;
+  font-weight: bolder;
+  font-size: 1.5rem;
+}
+
+.translation {
+  margin-top: 15%;
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: bold;
+}
