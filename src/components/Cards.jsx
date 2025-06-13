@@ -88,21 +88,24 @@ const [showTranslation, setShowTranslation] = useState(false);
   }
 
   return (
-    <div className={styles.cardsContainer}>
-      <div className={styles.carouselBtns}>
-        <button className={styles.carouselBtn} onClick={prevCard}>&lt;</button>
+    <div>
+      <div className={styles.cardsContainer}>
+        <div className={styles.carouselBtns}>
+          <button className={styles.carouselBtn} onClick={prevCard}>&lt;</button>
+        </div>
+        <Cards
+          key={items[currentIndex].id}
+          word={items[currentIndex].word}
+          transcription={items[currentIndex].transcription}
+          translation={items[currentIndex].translation}
+          showTranslation={showTranslation}
+          show={handleShowTranslation}
+        />
+        <div className={styles.carouselBtns}>
+          <button className={styles.carouselBtn} onClick={nextCard}>&gt;</button>
+        </div>
       </div>
-      <Cards
-        key={items[currentIndex].id}
-        word={items[currentIndex].word}
-        transcription={items[currentIndex].transcription}
-        translation={items[currentIndex].translation}
-        showTranslation={showTranslation}
-        show={handleShowTranslation}
-      />
-      <div className={styles.carouselBtns}>
-        <button className={styles.carouselBtn} onClick={nextCard}>&gt;</button>
-      </div>
+      <p className={styles.counter}>{currentIndex + 1} / {items.length}</p>
     </div>
   );
 };

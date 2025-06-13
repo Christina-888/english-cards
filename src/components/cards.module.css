@@ -26,6 +26,7 @@
   padding: 6px 13px;
   font-weight: bolder;
   font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .cardBtn {
@@ -37,9 +38,20 @@
   font-size: 1.5rem;
 }
 
+.cardBtn:hover{
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
 .translation {
   margin-top: 15%;
   font-size: 3rem;
   font-style: italic;
   font-weight: bold;
+}
+
+.counter {
+  text-align: center;
+  font-weight: bolder;
+  padding-bottom: 3%;
 }
