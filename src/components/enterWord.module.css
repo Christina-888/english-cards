@@ -1,4 +1,5 @@
-.table {
+.formTable {
+  justify-self: center;
   width: 90%;
   border: 1px solid black;
   margin: 0 auto;

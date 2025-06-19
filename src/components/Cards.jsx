@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import styles from './cards.module.css';
+import { useState } from "react";
+import styles from "./cards.module.css";
 
 const Cards = ({ word, transcription, translation, showTranslation, show }) => {
-
   return (
     <div className={styles.card}>
-      <h1>{word}</h1>
-      <p>{transcription}</p>
+      <h1 className={styles.word}>{word}</h1>
+      <p className={styles.transcription}>{transcription}</p>
       {showTranslation ? (
-        <p className={styles.translation}>{translation}</p> )
-        : (
-      <button className={styles.cardBtn} onClick={show}>SHOW</button>
-        )}
+        <p className={styles.translation}>{translation}</p>
+      ) : (
+        <button className={styles.cardBtn} onClick={show}>
+          SHOW
+        </button>
+      )}
     </div>
   );
 };
@@ -68,10 +69,9 @@ const CardItems = () => {
     },
   ];
 
-//Реализуем карусель:
-const [currentIndex, setCurrentIndex] = useState(0);
-const [showTranslation, setShowTranslation] = useState(false);
-
+  //Реализуем карусель:
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showTranslation, setShowTranslation] = useState(false);
 
   const nextCard = () => {
     setCurrentIndex(currentIndex + 1 >= items.length ? 0 : currentIndex + 1);
@@ -85,13 +85,15 @@ const [showTranslation, setShowTranslation] = useState(false);
 
   const handleShowTranslation = () => {
     setShowTranslation(true);
-  }
+  };
 
   return (
     <div>
       <div className={styles.cardsContainer}>
         <div className={styles.carouselBtns}>
-          <button className={styles.carouselBtn} onClick={prevCard}>&lt;</button>
+          <button className={styles.carouselBtn} onClick={prevCard}>
+            &lt;
+          </button>
         </div>
         <Cards
           key={items[currentIndex].id}
@@ -102,10 +104,14 @@ const [showTranslation, setShowTranslation] = useState(false);
           show={handleShowTranslation}
         />
         <div className={styles.carouselBtns}>
-          <button className={styles.carouselBtn} onClick={nextCard}>&gt;</button>
+          <button className={styles.carouselBtn} onClick={nextCard}>
+            &gt;
+          </button>
         </div>
       </div>
-      <p className={styles.counter}>{currentIndex + 1} / {items.length}</p>
+      <p className={styles.counter}>
+        {currentIndex + 1} / {items.length}
+      </p>
     </div>
   );
 };

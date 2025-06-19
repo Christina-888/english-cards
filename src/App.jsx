@@ -1,9 +1,9 @@
-import './App.css'
-import Table from "./components/Wordlist"
-import Form from "./components/EnterWord"
-import CardItems from "./components/Cards"
-import ErrorMessage from "./components/Missing"
-import Header from "./components/Header"
+import "./App.css";
+import Table from "./components/Wordlist";
+import Form from "./components/EnterWord";
+import CardItems from "./components/Cards";
+import ErrorMessage from "./components/Missing";
+import Header from "./components/Header";
 
 function App() {
   return (
@@ -14,9 +14,9 @@ function App() {
         <Form />
         <CardItems />
         <ErrorMessage />
-      </div>  
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
