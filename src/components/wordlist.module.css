@@ -1,6 +1,5 @@
 body {
   background-color: rgb(211, 188, 160);
-  margin-top: 80px;
 }
 
 .container {
@@ -9,15 +8,21 @@ body {
   align-items: center;
 }
 
+.tableWrapper {
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .table {
   width: 90%;
   border: 1px solid black;
-  margin: 0 auto;
+  margin: 90px auto 20px auto;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  margin-bottom: 20px;
+  table-layout: fixed;
 }
 
-.table th, .table td {
+.table th,
+.table td {
   border: 1px solid black;
 }
 
@@ -29,14 +34,16 @@ body {
   background-color: bisque;
 }
 
-.edit, .remove {
+.edit,
+.remove {
   width: 15px;
   height: 15px;
   margin-left: 10%;
   cursor: pointer;
 }
 
-.edit:hover, .remove:hover {
+.edit:hover,
+.remove:hover {
   transform: scale(1.1);
 }
 

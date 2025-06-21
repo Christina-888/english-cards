@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 100px;
 }
 
 .img {
@@ -19,4 +20,8 @@
 .paragraphSecond {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.5rem;
+}
+
+.mainLink {
+  color: rgb(117, 56, 82);
 }

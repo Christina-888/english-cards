@@ -1,5 +1,6 @@
 .headerContainer {
   display: flex;
+  align-items: center;
   background-color: rgb(253, 205, 147);
   margin-bottom: 3%;
   position: fixed;
@@ -11,5 +12,30 @@
 
 .logoImg {
   width: 40px;
-  padding-left: 30px;
+  padding-left: 80px;
+  cursor: pointer;
+}
+
+.nav {
+  margin-left: auto;
+}
+
+.navList {
+  display: flex;
+  gap: 20px;
+}
+
+.navItems {
+  text-transform: uppercase;
+  list-style-type: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-right: 80px;
+}
+
+.navItems a {
+  text-decoration: none;
+  cursor: pointer;
+  color: rgb(110, 103, 94);
 }

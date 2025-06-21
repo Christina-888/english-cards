@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: 80px;
 }
 
 .card {
@@ -10,8 +11,8 @@
   border-radius: 20px;
   margin: 1%;
   padding: 5%;
-  width: 30vw;
-  height: 55vh;
+  width: 25vw;
+  height: 50vh;
   text-align: center;
   font-size: 2rem;
 }
@@ -22,7 +23,7 @@
 }
 
 .carouselBtn {
-  background-color: rgb(172, 153, 130); 
+  background-color: rgb(172, 153, 130);
   border-radius: 25px;
   padding: 6px 13px;
   font-weight: bolder;
@@ -39,7 +40,7 @@
   font-size: 1.5rem;
 }
 
-.cardBtn:hover{
+.cardBtn:hover {
   transform: scale(1.1);
   cursor: pointer;
 }

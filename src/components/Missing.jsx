@@ -7,7 +7,10 @@ const ErrorMessage = () => {
       <img className={styles.img} src={spacemanImg} alt="spaceman" />
       <p className={styles.paragraph}>HOUSTON, WE HAVE 404!</p>
       <p className={styles.paragraphSecond}>
-        Practice makes perfect, so return to main
+        Practice makes perfect, so return to{" "}
+        <a href="/" className={styles.mainLink}>
+          main
+        </a>
       </p>
     </div>
   );
