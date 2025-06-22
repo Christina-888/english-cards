@@ -8,7 +8,7 @@ const Form = () => {
         <input
           type="text"
           id="transcription"
-          placeholder="Transcription"
+          placeholder="Transcript."
           required
         />
         <input type="text" id="russian" placeholder="Russian" required />

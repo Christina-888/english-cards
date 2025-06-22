@@ -24,6 +24,7 @@ body {
 .table th,
 .table td {
   border: 1px solid black;
+  font-size: 1.2rem;
 }
 
 .table th {
@@ -50,4 +51,26 @@ body {
 .actions {
   display: flex;
   justify-content: center;
+}
+
+@media screen and (max-width: 1000px) {
+  .table th {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .table th {
+    font-size: 0.5rem;
+  }
+
+  .table td {
+    font-size: 0.7rem;
+  }
+
+  .edit,
+  .remove {
+    width: 10px;
+    height: 10px;
+  }
 }

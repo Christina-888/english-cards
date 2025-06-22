@@ -112,7 +112,7 @@ const Table = ({ showTags = true, isEmpty = false }) => {
         <thead>
           <tr>
             <th>ENGLISH</th>
-            <th>TRANSCRIPTION</th>
+            <th>TRANSCRIPT.</th>
             <th>RUSSIAN</th>
             {showTags && <th>TAGS</th>}
             <th className={styles.actions}>ACTIONS</th>

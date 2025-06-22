@@ -39,3 +39,21 @@
   cursor: pointer;
   color: rgb(110, 103, 94);
 }
+
+@media screen and (max-width: 500px) {
+  .logoImg {
+    padding-left: 40px;
+  }
+
+  .navList {
+    display: inline-block;
+  }
+
+  .navItems {
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    list-style-type: disc;
+    margin: 3% auto;
+    padding-right: 40px;
+  }
+}
