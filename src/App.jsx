@@ -10,18 +10,26 @@ function App() {
   return (
     <>
       <div>
-        <Header />
         <Routes>
           <Route
             path="/"
             element={
               <>
+                <Header />
                 <Table />
                 <Form />
               </>
             }
           />
-          <Route path="/game" element={<CardItems />} />
+          <Route
+            path="/game"
+            element={
+              <>
+                <Header />
+                <CardItems />
+              </>
+            }
+          />
           <Route path="*" element={<ErrorMessage />} />
         </Routes>
       </div>
