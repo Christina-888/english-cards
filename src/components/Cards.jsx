@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./cards.module.css";
 
-const Cards = ({ word, transcription, translation, showTranslation, show }) => {
+const Cards = ({ word, transcription, translation, showTranslation, show, setButtonRef }) => {
   return (
     <div className={styles.card}>
       <h1 className={styles.word}>{word}</h1>
@@ -9,7 +9,7 @@ const Cards = ({ word, transcription, translation, showTranslation, show }) => {
       {showTranslation ? (
         <p className={styles.translation}>{translation}</p>
       ) : (
-        <button className={styles.cardBtn} onClick={show}>
+        <button ref={setButtonRef} className={styles.cardBtn} onClick={show}>
           SHOW
         </button>
       )}
@@ -72,6 +72,7 @@ const CardItems = () => {
   //Реализуем карусель:
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showTranslation, setShowTranslation] = useState(false);
+  const [learnedWords, setLearnedWords] = useState([]);
 
   const nextCard = () => {
     setCurrentIndex(currentIndex + 1 >= items.length ? 0 : currentIndex + 1);
@@ -85,7 +86,28 @@ const CardItems = () => {
 
   const handleShowTranslation = () => {
     setShowTranslation(true);
+    //  setLearnedWords(learnedWords + 1);
+
+    const currentWord = items[currentIndex].id;
+
+    if (!learnedWords.includes(currentWord)) {
+      setLearnedWords([...learnedWords, currentWord]);
+    }
   };
+
+  // Реализуем фокус на кнопке:
+  const showButtonRef = useRef(null);
+
+  const setShowButtonRef = (node) => {
+    showButtonRef.current = node;
+  };
+
+  useEffect(() => {
+    setShowTranslation(false);
+    if (showButtonRef.current) {
+      showButtonRef.current.focus();
+    }
+  }, [currentIndex]);
 
   return (
     <div>
@@ -102,6 +124,7 @@ const CardItems = () => {
           translation={items[currentIndex].translation}
           showTranslation={showTranslation}
           show={handleShowTranslation}
+          setButtonRef={setShowButtonRef}
         />
         <div className={styles.carouselBtns}>
           <button className={styles.carouselBtn} onClick={nextCard}>
@@ -111,6 +134,10 @@ const CardItems = () => {
       </div>
       <p className={styles.counter}>
         {currentIndex + 1} / {items.length}
+      </p>
+      <p className={styles.result}>
+        You learned {learnedWords.length} {""}
+        {learnedWords.length === 1 ? "word" : "words"}
       </p>
     </div>
   );
