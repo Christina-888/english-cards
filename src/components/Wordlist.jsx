@@ -68,6 +68,26 @@ const Table = ({ showTags = true, isEmpty = false }) => {
   const [editedRow, setEditedRow] = useState(null);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
+  // Валидация на пустые поля:
+  const checkEmptyFields = () => {
+    const requiredFields = [
+      "firstItem",
+      "secondItem",
+      "thirdItem",
+      "fourthItem",
+    ];
+
+    if (!editedRow) return true;
+
+    for (let i = 0; i < requiredFields.length; i++) {
+      const field = requiredFields[i];
+      if (editedRow[field].trim() === "") {
+        return true; // есть пустые поля;
+      }
+    }
+    return false; // нет пустых полей;
+  };
+
   const handleEdit = (index) => {
     setEditingIndex(index);
     setEditedRow({ ...tableData[index] });
@@ -82,13 +102,19 @@ const Table = ({ showTags = true, isEmpty = false }) => {
   };
 
   const handleSave = (index) => {
+    if (checkEmptyFields()) {
+      alert("Заполните, пожалуйста, все поля!");
+      return;
+    }
+
+    console.log("Saved:", editedRow);
+
     const updatedTable = [...tableData];
     updatedTable[index] = editedRow;
     setTableData(updatedTable);
     setEditingIndex(null);
     setEditedRow(null);
     setShowSaveButton(false);
-    console.log("Сохранено:", editedRow);
   };
 
   const handleRemove = (index) => {
@@ -133,6 +159,12 @@ const Table = ({ showTags = true, isEmpty = false }) => {
                         handleInputChange("firstItem", e.target.value)
                       }
                       className={styles.input}
+                      style={{
+                        border:
+                          editedRow.firstItem.trim() === ""
+                            ? "1px solid red"
+                            : undefined,
+                      }}
                     />
                   ) : (
                     el.firstItem
@@ -147,6 +179,12 @@ const Table = ({ showTags = true, isEmpty = false }) => {
                         handleInputChange("secondItem", e.target.value)
                       }
                       className={styles.input}
+                      style={{
+                        border:
+                          editedRow.secondItem.trim() === ""
+                            ? "1px solid red"
+                            : undefined,
+                      }}
                     />
                   ) : (
                     el.secondItem
@@ -161,6 +199,12 @@ const Table = ({ showTags = true, isEmpty = false }) => {
                         handleInputChange("thirdItem", e.target.value)
                       }
                       className={styles.input}
+                      style={{
+                        border:
+                          editedRow.thirdItem.trim() === ""
+                            ? "1px solid red"
+                            : undefined,
+                      }}
                     />
                   ) : (
                     el.thirdItem
@@ -176,6 +220,12 @@ const Table = ({ showTags = true, isEmpty = false }) => {
                           handleInputChange("fourthItem", e.target.value)
                         }
                         className={styles.input}
+                        style={{
+                          border:
+                            editedRow.fourthItem.trim() === ""
+                              ? "1px solid red"
+                              : undefined,
+                        }}
                       />
                     ) : (
                       el.fourthItem
