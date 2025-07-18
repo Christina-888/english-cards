@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import WordsContext from "../contexts/WordsContext";
+import Loading from "./Loading";
 import styles from "./wordlist.module.css";
 import editIcon from "../assets/images/icons/edit.svg";
 import removeIcon from "../assets/images/icons/remove.svg";
@@ -132,7 +133,7 @@ const Table = ({ showTags = true, isEmpty = false }) => {
   };
 
   if (loading) {
-    return <div className={styles.emptyMessage}>Загрузка...</div>;
+    return <Loading />;
   }
 
   if (isEmpty || words.length === 0) {

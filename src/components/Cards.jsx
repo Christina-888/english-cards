@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import WordsContext from "../contexts/WordsContext";
+import Loading from "./Loading";
 import styles from "./cards.module.css";
 
 /*const CardItems = () => {
@@ -114,7 +115,7 @@ const CardItems = () => {
     }
   }, [currentIndex]);
 
-  if (loading) return <p>Загрузка карточек...</p>;
+  if (loading) return <Loading />;
   if (!words.length) return <p>Слов нет для отображения.</p>;
 
   return (
