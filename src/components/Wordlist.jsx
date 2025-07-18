@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import WordsContext from "../contexts/WordsContext";
 import styles from "./wordlist.module.css";
 import editIcon from "../assets/images/icons/edit.svg";
 import removeIcon from "../assets/images/icons/remove.svg";
 
-const initialTable = [
+/*const initialTable = [
   {
     firstItem: "World",
     secondItem: "[wɜːld]",
@@ -60,75 +61,81 @@ const initialTable = [
     fourthItem: "Colors",
     isApproved: true,
   },
-];
+]; */
 
 const Table = ({ showTags = true, isEmpty = false }) => {
-  const [tableData, setTableData] = useState(initialTable);
+  const { words, updateWord, deleteWord, loading } = useContext(WordsContext);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedRow, setEditedRow] = useState(null);
-  const [showSaveButton, setShowSaveButton] = useState(false);
 
-  // Валидация на пустые поля:
   const checkEmptyFields = () => {
-    const requiredFields = [
-      "firstItem",
-      "secondItem",
-      "thirdItem",
-      "fourthItem",
-    ];
-
     if (!editedRow) return true;
 
-    for (let i = 0; i < requiredFields.length; i++) {
-      const field = requiredFields[i];
-      if (editedRow[field].trim() === "") {
-        return true; // есть пустые поля;
-      }
-    }
-    return false; // нет пустых полей;
+    //Валидация на пустые поля:
+    return (
+      !editedRow.english?.trim() ||
+      !editedRow.transcription?.trim() ||
+      !editedRow.russian?.trim() ||
+      (showTags && !editedRow.tags?.trim())
+    );
   };
 
   const handleEdit = (index) => {
     setEditingIndex(index);
-    setEditedRow({ ...tableData[index] });
-    setShowSaveButton(true);
+    const word = words[index];
+    setEditedRow({
+      english: word.english,
+      transcription: word.transcription || "",
+      russian: word.russian,
+      tags: word.tags || "",
+    });
   };
 
   const handleInputChange = (field, value) => {
-    setEditedRow((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setEditedRow((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSave = (index) => {
+  const handleSave = async () => {
     if (checkEmptyFields()) {
       alert("Заполните, пожалуйста, все поля!");
       return;
     }
-
-    console.log("Saved:", editedRow);
-
-    const updatedTable = [...tableData];
-    updatedTable[index] = editedRow;
-    setTableData(updatedTable);
-    setEditingIndex(null);
-    setEditedRow(null);
-    setShowSaveButton(false);
-  };
-
-  const handleRemove = (index) => {
-    const updatedTable = [...tableData];
-    updatedTable.splice(index, 1);
-    setTableData(updatedTable);
-    if (editingIndex === index) {
+    try {
+      const wordToUpdate = {
+        ...words[editingIndex],
+        english: editedRow.english,
+        transcription: editedRow.transcription,
+        russian: editedRow.russian,
+        tags: editedRow.tags,
+      };
+      await updateWord(wordToUpdate);
       setEditingIndex(null);
       setEditedRow(null);
-      setShowSaveButton(false);
+    } catch (error) {
+      alert("Ошибка сохранения! Попробуйте, please, ещё раз.");
+      console.error(error);
     }
   };
 
-  if (isEmpty) {
+  const handleRemove = (index) => {
+    deleteWord(words[index].id)
+      .then(() => {
+        if (editingIndex === index) {
+          setEditingIndex(null);
+          setEditedRow(null);
+        }
+      })
+      .catch((error) => {
+        alert("Ошибка удаления! Попробуйте, please, ещё раз.");
+        console.log(error);
+      });
+  };
+
+  if (loading) {
+    return <div className={styles.emptyMessage}>Загрузка...</div>;
+  }
+
+  if (isEmpty || words.length === 0) {
     return <div className={styles.emptyMessage}>Список слов пуст</div>;
   }
 
@@ -145,69 +152,65 @@ const Table = ({ showTags = true, isEmpty = false }) => {
           </tr>
         </thead>
         <tbody>
-          {tableData.map((el, index) => {
+          {words.map((word, index) => {
             const isEditing = editingIndex === index;
-
             return (
-              <tr key={index}>
+              <tr key={word.id}>
                 <td>
                   {isEditing ? (
                     <input
                       type="text"
-                      value={editedRow.firstItem}
+                      value={editedRow.english}
                       onChange={(e) =>
-                        handleInputChange("firstItem", e.target.value)
+                        handleInputChange("english", e.target.value)
                       }
                       className={styles.input}
                       style={{
-                        border:
-                          editedRow.firstItem.trim() === ""
-                            ? "1px solid red"
-                            : undefined,
+                        border: !editedRow.english.trim()
+                          ? "1px solid red"
+                          : undefined,
                       }}
                     />
                   ) : (
-                    el.firstItem
+                    word.english
                   )}
                 </td>
                 <td>
                   {isEditing ? (
                     <input
                       type="text"
-                      value={editedRow.secondItem}
+                      value={editedRow.transcription}
                       onChange={(e) =>
-                        handleInputChange("secondItem", e.target.value)
+                        handleInputChange("transcription", e.target.value)
                       }
                       className={styles.input}
                       style={{
-                        border:
-                          editedRow.secondItem.trim() === ""
-                            ? "1px solid red"
-                            : undefined,
+                        border: !editedRow.transcription.trim()
+                          ? "1px solid red"
+                          : undefined,
                       }}
                     />
                   ) : (
-                    el.secondItem
+                    word.transcription
                   )}
                 </td>
                 <td>
                   {isEditing ? (
                     <input
                       type="text"
-                      value={editedRow.thirdItem}
+                      value={editedRow.russian}
                       onChange={(e) =>
-                        handleInputChange("thirdItem", e.target.value)
+                        handleInputChange("russian", e.target.value)
                       }
                       className={styles.input}
                       style={{
-                        border:
-                          editedRow.thirdItem.trim() === ""
-                            ? "1px solid red"
-                            : undefined,
+                        border: !editedRow.russian.trim()
+                          ? "1px solid red"
+                          : undefined,
                       }}
                     />
                   ) : (
-                    el.thirdItem
+                    word.russian
                   )}
                 </td>
                 {showTags && (
@@ -215,57 +218,69 @@ const Table = ({ showTags = true, isEmpty = false }) => {
                     {isEditing ? (
                       <input
                         type="text"
-                        value={editedRow.fourthItem}
+                        value={editedRow.tags}
                         onChange={(e) =>
-                          handleInputChange("fourthItem", e.target.value)
+                          handleInputChange("tags", e.target.value)
                         }
                         className={styles.input}
                         style={{
-                          border:
-                            editedRow.fourthItem.trim() === ""
-                              ? "1px solid red"
-                              : undefined,
+                          border: !editedRow.tags.trim()
+                            ? "1px solid red"
+                            : undefined,
                         }}
                       />
                     ) : (
-                      el.fourthItem
+                      word.tags
                     )}
                   </td>
                 )}
                 <td className={styles.actions}>
-                  {/* Кнопка Save (V) показывается только при редактировании */}
-                  {isEditing && showSaveButton && (
-                    <button
-                      className={styles.iconButton}
-                      onClick={() => handleSave(index)}
-                      aria-label="Save"
-                    >
-                      V
-                    </button>
+                  {isEditing ? (
+                    <>
+                      <button
+                        className={styles.iconButton}
+                        onClick={handleSave}
+                        aria-label="Save"
+                      >
+                        V
+                      </button>
+                      <button
+                        className={styles.iconButton}
+                        onClick={() => {
+                          setEditingIndex(null);
+                          setEditedRow(null);
+                        }}
+                        aria-label="Cancel"
+                      >
+                        X
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className={styles.iconButton}
+                        onClick={() => handleEdit(index)}
+                        aria-label="Edit"
+                      >
+                        <img
+                          className={styles.edit}
+                          src={editIcon}
+                          alt="Edit"
+                        />
+                      </button>
+                      <button
+                        className={styles.iconButton}
+                        onClick={() => handleRemove(index)}
+                        aria-label="Remove"
+                      >
+                        <img
+                          className={styles.remove}
+                          src={removeIcon}
+                          alt="Remove"
+                        />
+                      </button>
+                    </>
                   )}
-
-                  {/* Кнопка Edit скрывается при редактировании */}
-                  {!isEditing && (
-                    <button
-                      className={styles.iconButton}
-                      onClick={() => handleEdit(index)}
-                      aria-label="Edit"
-                    >
-                      <img className={styles.edit} src={editIcon} alt="Edit" />
-                    </button>
-                  )}
-
-                  <button
-                    className={styles.iconButton}
-                    onClick={() => handleRemove(index)}
-                    aria-label="Remove"
-                  >
-                    <img
-                      className={styles.remove}
-                      src={removeIcon}
-                      alt="Remove"
-                    />
-                  </button>
                 </td>
               </tr>
             );

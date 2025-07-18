@@ -1,23 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import WordsContext from "../contexts/WordsContext";
 import styles from "./cards.module.css";
 
-const Cards = ({ word, transcription, translation, showTranslation, show, setButtonRef }) => {
-  return (
-    <div className={styles.card}>
-      <h1 className={styles.word}>{word}</h1>
-      <p className={styles.transcription}>{transcription}</p>
-      {showTranslation ? (
-        <p className={styles.translation}>{translation}</p>
-      ) : (
-        <button ref={setButtonRef} className={styles.cardBtn} onClick={show}>
-          SHOW
-        </button>
-      )}
-    </div>
-  );
-};
-
-const CardItems = () => {
+/*const CardItems = () => {
   const items = [
     {
       id: 1,
@@ -67,35 +52,55 @@ const CardItems = () => {
       transcription: "[ˈjeləʊ]",
       translation: "Жёлтый",
     },
-  ];
+  ]; */
 
-  //Реализуем карусель:
+const Cards = ({
+  word,
+  transcription,
+  translation,
+  showTranslation,
+  show,
+  setButtonRef,
+}) => {
+  return (
+    <div className={styles.card}>
+      <h1 className={styles.word}>{word}</h1>
+      <p className={styles.transcription}>{transcription}</p>
+      {showTranslation ? (
+        <p className={styles.translation}>{translation}</p>
+      ) : (
+        <button ref={setButtonRef} className={styles.cardBtn} onClick={show}>
+          SHOW
+        </button>
+      )}
+    </div>
+  );
+};
+
+const CardItems = () => {
+  const { words, loading } = useContext(WordsContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showTranslation, setShowTranslation] = useState(false);
   const [learnedWords, setLearnedWords] = useState([]);
 
   const nextCard = () => {
-    setCurrentIndex(currentIndex + 1 >= items.length ? 0 : currentIndex + 1);
+    setCurrentIndex(currentIndex + 1 >= words.length ? 0 : currentIndex + 1);
     setShowTranslation(false);
   };
 
   const prevCard = () => {
-    setCurrentIndex(currentIndex - 1 < 0 ? items.length - 1 : currentIndex - 1);
+    setCurrentIndex(currentIndex - 1 < 0 ? words.length - 1 : currentIndex - 1);
     setShowTranslation(false);
   };
 
   const handleShowTranslation = () => {
     setShowTranslation(true);
-    //  setLearnedWords(learnedWords + 1);
-
-    const currentWord = items[currentIndex].id;
-
-    if (!learnedWords.includes(currentWord)) {
-      setLearnedWords([...learnedWords, currentWord]);
+    const currentWordId = words[currentIndex]?.id;
+    if (currentWordId && !learnedWords.includes(currentWordId)) {
+      setLearnedWords([...learnedWords, currentWordId]);
     }
   };
 
-  // Реализуем фокус на кнопке:
   const showButtonRef = useRef(null);
 
   const setShowButtonRef = (node) => {
@@ -109,6 +114,9 @@ const CardItems = () => {
     }
   }, [currentIndex]);
 
+  if (loading) return <p>Загрузка карточек...</p>;
+  if (!words.length) return <p>Слов нет для отображения.</p>;
+
   return (
     <div>
       <div className={styles.cardsContainer}>
@@ -118,10 +126,10 @@ const CardItems = () => {
           </button>
         </div>
         <Cards
-          key={items[currentIndex].id}
-          word={items[currentIndex].word}
-          transcription={items[currentIndex].transcription}
-          translation={items[currentIndex].translation}
+          key={words[currentIndex].id}
+          word={words[currentIndex].english}
+          transcription={words[currentIndex].transcription}
+          translation={words[currentIndex].russian}
           showTranslation={showTranslation}
           show={handleShowTranslation}
           setButtonRef={setShowButtonRef}
@@ -133,10 +141,10 @@ const CardItems = () => {
         </div>
       </div>
       <p className={styles.counter}>
-        {currentIndex + 1} / {items.length}
+        {currentIndex + 1} / {words.length}
       </p>
       <p className={styles.result}>
-        You learned {learnedWords.length} {""}
+        You learned {learnedWords.length}{" "}
         {learnedWords.length === 1 ? "word" : "words"}
       </p>
     </div>
