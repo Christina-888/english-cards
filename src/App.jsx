@@ -1,4 +1,5 @@
 import { Routes, Route, NavLink } from "react-router";
+import wordsStore from "./store/WordsStore";
 import Table from "./components/Wordlist";
 import Form from "./components/EnterWord";
 import CardItems from "./components/Cards";
@@ -8,7 +9,7 @@ import "./App.css";
 
 function App() {
   return (
-    <>
+    <Provider store={wordsStore}>
       <div>
         <Routes>
           <Route
@@ -33,7 +34,7 @@ function App() {
           <Route path="*" element={<ErrorMessage />} />
         </Routes>
       </div>
-    </>
+    </Provider>
   );
 }
 
