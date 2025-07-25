@@ -1,7 +1,15 @@
 import { useState, useRef, useEffect } from "react";
+import { inject, observer } from "mobx-react";
 import styles from "./cards.module.css";
 
-const Cards = ({ word, transcription, translation, showTranslation, show, setButtonRef }) => {
+const Card = ({
+  word,
+  transcription,
+  translation,
+  showTranslation,
+  onShowClick,
+  setButtonRef,
+}) => {
   return (
     <div className={styles.card}>
       <h1 className={styles.word}>{word}</h1>
@@ -9,7 +17,11 @@ const Cards = ({ word, transcription, translation, showTranslation, show, setBut
       {showTranslation ? (
         <p className={styles.translation}>{translation}</p>
       ) : (
-        <button ref={setButtonRef} className={styles.cardBtn} onClick={show}>
+        <button
+          ref={setButtonRef}
+          className={styles.cardBtn}
+          onClick={onShowClick}
+        >
           SHOW
         </button>
       )}
@@ -17,90 +29,34 @@ const Cards = ({ word, transcription, translation, showTranslation, show, setBut
   );
 };
 
-const CardItems = () => {
-  const items = [
-    {
-      id: 1,
-      word: "World",
-      transcription: "[wɜːld]",
-      translation: "Мир",
-    },
-    {
-      id: 2,
-      word: "Mother",
-      transcription: "[ˈmʌðə]",
-      translation: "Мама",
-    },
-    {
-      id: 3,
-      word: "Sun",
-      transcription: "[sʌn]",
-      translation: "Солнце",
-    },
-    {
-      id: 4,
-      word: "Brother",
-      transcription: "[ˈbɹʌðə(ɹ)]",
-      translation: "Брат",
-    },
-    {
-      id: 5,
-      word: "Wind",
-      transcription: "[wɪnd]",
-      translation: "Ветер",
-    },
-    {
-      id: 6,
-      word: "Blue",
-      transcription: "[bluː]",
-      translation: "Голубой",
-    },
-    {
-      id: 7,
-      word: "Wolf",
-      transcription: "[wʊlf]",
-      translation: "Волк",
-    },
-    {
-      id: 8,
-      word: "Yellow",
-      transcription: "[ˈjeləʊ]",
-      translation: "Жёлтый",
-    },
-  ];
+const CardItems = ({ wordsStore }) => {
+  const items = wordsStore.words;
 
-  //Реализуем карусель:
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showTranslation, setShowTranslation] = useState(false);
   const [learnedWords, setLearnedWords] = useState([]);
 
   const nextCard = () => {
-    setCurrentIndex(currentIndex + 1 >= items.length ? 0 : currentIndex + 1);
+    setCurrentIndex((prev) => (prev + 1 >= items.length ? 0 : prev + 1));
     setShowTranslation(false);
   };
 
   const prevCard = () => {
-    setCurrentIndex(currentIndex - 1 < 0 ? items.length - 1 : currentIndex - 1);
+    setCurrentIndex((prev) => (prev - 1 < 0 ? items.length - 1 : prev - 1));
     setShowTranslation(false);
   };
 
   const handleShowTranslation = () => {
     setShowTranslation(true);
-    //  setLearnedWords(learnedWords + 1);
 
-    const currentWord = items[currentIndex].id;
-
-    if (!learnedWords.includes(currentWord)) {
-      setLearnedWords([...learnedWords, currentWord]);
+    const currentWordId = items[currentIndex].id;
+    if (!learnedWords.includes(currentWordId)) {
+      setLearnedWords((prev) => [...prev, currentWordId]);
     }
   };
 
-  // Реализуем фокус на кнопке:
+  //Фокус на кнопке SHOW при смене карточки:
   const showButtonRef = useRef(null);
-
-  const setShowButtonRef = (node) => {
-    showButtonRef.current = node;
-  };
 
   useEffect(() => {
     setShowTranslation(false);
@@ -108,6 +64,8 @@ const CardItems = () => {
       showButtonRef.current.focus();
     }
   }, [currentIndex]);
+
+  const currentItem = items[currentIndex];
 
   return (
     <div>
@@ -117,14 +75,14 @@ const CardItems = () => {
             &lt;
           </button>
         </div>
-        <Cards
-          key={items[currentIndex].id}
-          word={items[currentIndex].word}
-          transcription={items[currentIndex].transcription}
-          translation={items[currentIndex].translation}
+        <Card
+          key={currentItem.id}
+          word={currentItem.english}
+          transcription={currentItem.transcription}
+          translation={currentItem.russian}
           showTranslation={showTranslation}
-          show={handleShowTranslation}
-          setButtonRef={setShowButtonRef}
+          onShowClick={handleShowTranslation}
+          setButtonRef={(node) => (showButtonRef.current = node)}
         />
         <div className={styles.carouselBtns}>
           <button className={styles.carouselBtn} onClick={nextCard}>
@@ -136,11 +94,13 @@ const CardItems = () => {
         {currentIndex + 1} / {items.length}
       </p>
       <p className={styles.result}>
-        You learned {learnedWords.length} {""}
+        You learned {learnedWords.length}{" "}
         {learnedWords.length === 1 ? "word" : "words"}
       </p>
     </div>
   );
 };
 
-export default CardItems;
+const EnhancedCardItems = inject("wordsStore")(observer(CardItems));
+
+export default EnhancedCardItems;

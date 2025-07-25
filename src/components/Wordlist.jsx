@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { inject, observer } from "mobx-react";
 import styles from "./wordlist.module.css";
 import editIcon from "../assets/images/icons/edit.svg";
 import removeIcon from "../assets/images/icons/remove.svg";
 
-const initialTable = [
+/*const initialTable = [
   {
     firstItem: "World",
     secondItem: "[wɜːld]",
@@ -60,37 +61,30 @@ const initialTable = [
     fourthItem: "Colors",
     isApproved: true,
   },
-];
+]; */
 
-const Table = ({ showTags = true, isEmpty = false }) => {
-  const [tableData, setTableData] = useState(initialTable);
+const Wordlist = ({ wordsStore }) => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedRow, setEditedRow] = useState(null);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
+  const words = wordsStore.words;
+
   // Валидация на пустые поля:
   const checkEmptyFields = () => {
-    const requiredFields = [
-      "firstItem",
-      "secondItem",
-      "thirdItem",
-      "fourthItem",
-    ];
-
     if (!editedRow) return true;
-
-    for (let i = 0; i < requiredFields.length; i++) {
-      const field = requiredFields[i];
-      if (editedRow[field].trim() === "") {
-        return true; // есть пустые поля;
+    const requiredFields = ["english", "transcription", "russian", "tags"];
+    for (let field of requiredFields) {
+      if (!editedRow[field] || editedRow[field].trim() === "") {
+        return true; // есть пустые поля
       }
     }
-    return false; // нет пустых полей;
+    return false;
   };
 
   const handleEdit = (index) => {
     setEditingIndex(index);
-    setEditedRow({ ...tableData[index] });
+    setEditedRow({ ...words[index] });
     setShowSaveButton(true);
   };
 
@@ -101,26 +95,25 @@ const Table = ({ showTags = true, isEmpty = false }) => {
     }));
   };
 
-  const handleSave = (index) => {
+  const handleSave = async () => {
     if (checkEmptyFields()) {
       alert("Заполните, пожалуйста, все поля!");
       return;
     }
 
-    console.log("Saved:", editedRow);
+    //Обновляем слово через стор:
+    await wordsStore.updateWord(editedRow);
 
-    const updatedTable = [...tableData];
-    updatedTable[index] = editedRow;
-    setTableData(updatedTable);
     setEditingIndex(null);
     setEditedRow(null);
     setShowSaveButton(false);
   };
 
-  const handleRemove = (index) => {
-    const updatedTable = [...tableData];
-    updatedTable.splice(index, 1);
-    setTableData(updatedTable);
+  const handleRemove = async (index) => {
+    const id = words[index].id;
+    await wordsStore.deleteWord(id);
+
+    //Если удаляем редактируемую строку — сбрасываем редактор:
     if (editingIndex === index) {
       setEditingIndex(null);
       setEditedRow(null);
@@ -128,7 +121,7 @@ const Table = ({ showTags = true, isEmpty = false }) => {
     }
   };
 
-  if (isEmpty) {
+  if (!words.length) {
     return <div className={styles.emptyMessage}>Список слов пуст</div>;
   }
 
@@ -140,100 +133,97 @@ const Table = ({ showTags = true, isEmpty = false }) => {
             <th>ENGLISH</th>
             <th>TRANSCRIPT.</th>
             <th>RUSSIAN</th>
-            {showTags && <th>TAGS</th>}
+            <th>TAGS</th>
             <th className={styles.actions}>ACTIONS</th>
           </tr>
         </thead>
         <tbody>
-          {tableData.map((el, index) => {
+          {words.map((word, index) => {
             const isEditing = editingIndex === index;
 
             return (
-              <tr key={index}>
+              <tr key={word.id}>
                 <td>
                   {isEditing ? (
                     <input
                       type="text"
-                      value={editedRow.firstItem}
+                      value={editedRow.english}
                       onChange={(e) =>
-                        handleInputChange("firstItem", e.target.value)
+                        handleInputChange("english", e.target.value)
                       }
                       className={styles.input}
                       style={{
                         border:
-                          editedRow.firstItem.trim() === ""
+                          editedRow.english.trim() === ""
                             ? "1px solid red"
                             : undefined,
                       }}
                     />
                   ) : (
-                    el.firstItem
+                    word.english
                   )}
                 </td>
                 <td>
                   {isEditing ? (
                     <input
                       type="text"
-                      value={editedRow.secondItem}
+                      value={editedRow.transcription}
                       onChange={(e) =>
-                        handleInputChange("secondItem", e.target.value)
+                        handleInputChange("transcription", e.target.value)
                       }
                       className={styles.input}
                       style={{
                         border:
-                          editedRow.secondItem.trim() === ""
+                          editedRow.transcription.trim() === ""
                             ? "1px solid red"
                             : undefined,
                       }}
                     />
                   ) : (
-                    el.secondItem
+                    word.transcription
                   )}
                 </td>
                 <td>
                   {isEditing ? (
                     <input
                       type="text"
-                      value={editedRow.thirdItem}
+                      value={editedRow.russian}
                       onChange={(e) =>
-                        handleInputChange("thirdItem", e.target.value)
+                        handleInputChange("russian", e.target.value)
                       }
                       className={styles.input}
                       style={{
                         border:
-                          editedRow.thirdItem.trim() === ""
+                          editedRow.russian.trim() === ""
                             ? "1px solid red"
                             : undefined,
                       }}
                     />
                   ) : (
-                    el.thirdItem
+                    word.russian
                   )}
                 </td>
-                {showTags && (
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={editedRow.fourthItem}
-                        onChange={(e) =>
-                          handleInputChange("fourthItem", e.target.value)
-                        }
-                        className={styles.input}
-                        style={{
-                          border:
-                            editedRow.fourthItem.trim() === ""
-                              ? "1px solid red"
-                              : undefined,
-                        }}
-                      />
-                    ) : (
-                      el.fourthItem
-                    )}
-                  </td>
-                )}
+                <td>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editedRow.tags}
+                      onChange={(e) =>
+                        handleInputChange("tags", e.target.value)
+                      }
+                      className={styles.input}
+                      style={{
+                        border:
+                          editedRow.tags.trim() === ""
+                            ? "1px solid red"
+                            : undefined,
+                      }}
+                    />
+                  ) : (
+                    word.tags
+                  )}
+                </td>
                 <td className={styles.actions}>
-                  {/* Кнопка Save (V) показывается только при редактировании */}
                   {isEditing && showSaveButton && (
                     <button
                       className={styles.iconButton}
@@ -243,8 +233,6 @@ const Table = ({ showTags = true, isEmpty = false }) => {
                       V
                     </button>
                   )}
-
-                  {/* Кнопка Edit скрывается при редактировании */}
                   {!isEditing && (
                     <button
                       className={styles.iconButton}
@@ -254,7 +242,6 @@ const Table = ({ showTags = true, isEmpty = false }) => {
                       <img className={styles.edit} src={editIcon} alt="Edit" />
                     </button>
                   )}
-
                   <button
                     className={styles.iconButton}
                     onClick={() => handleRemove(index)}
@@ -276,4 +263,6 @@ const Table = ({ showTags = true, isEmpty = false }) => {
   );
 };
 
-export default Table;
+const InjectedWordlist = inject("wordsStore")(observer(Wordlist));
+
+export default InjectedWordlist;
